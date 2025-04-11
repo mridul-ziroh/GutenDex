@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BookDownloadView: View {
     var viewModel: BookDetailViewModel
-    @Environment(\.dismiss) private var dismiss
+     @State private var downloadedLinks: Set<String> = []
     
     var body: some View {
         List {
@@ -25,10 +25,13 @@ struct BookDownloadView: View {
                         .fontWeight(.bold)
                     Spacer()
                     Button {
+                        guard !downloadedLinks.contains(link.link) else{
+                            return
+                        }
                         Task {
                             let isSuccess = await viewModel.downloadBook(link.link)
                             if isSuccess {
-                                dismiss()
+                                downloadedLinks.insert(link.link)
                             }
                         }
                     } label:  {
@@ -36,13 +39,15 @@ struct BookDownloadView: View {
                             Text("\(link.ext)")
                                 .font(.body)
                                 .lineLimit(1)
-                            Image(systemName: "arrowshape.down.fill")
+                                .foregroundStyle(.white)
+                            Image(systemName: downloadedLinks.contains(link.link) ?
+                                  "checkmark" : "arrowshape.down.fill")
                                 .font(.body)
                                 .foregroundStyle(.white)
                         }
                         .padding(.horizontal, 14)
                         .padding(.vertical, 5)
-                        .background(.blue)
+                        .background(downloadedLinks.contains(link.link) ? .green : .blue)
                         .clipShape(Capsule())
                     }
                 }
