@@ -11,7 +11,7 @@ import SwiftUI
 struct GutenDexApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            BookListView()
         }
     }
 }
