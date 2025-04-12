@@ -26,6 +26,7 @@ class BookListViewModel: ObservableObject {
         }
     }
     
+    @MainActor
     func fetchNextPage() async {
         guard let nextPageURL = nextPageURL else {
             return
